@@ -5,6 +5,7 @@ const connectDb = require("./config/db");
 
 app.get("/", (req, res) => res.send("API running"));
 
+//Initial DB Setup
 connectDb();
 const PORT = process.env.port || 5000;
 
