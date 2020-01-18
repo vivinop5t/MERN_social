@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://vivin36:prasannaa@cluster0-jdwtp.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://vivin36:prasannaa@cluster0-jdwtp.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "secret"
 }
