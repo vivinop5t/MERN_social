@@ -183,7 +183,7 @@ router.put("/experience/:experience_id", auth, async (req, res) => {
 
     res.json(profile);
   } catch (e) {
-    console.log("e", e);
+    console.log("error", e);
     res.status(400).send("server error");
   }
 });
