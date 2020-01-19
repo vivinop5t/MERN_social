@@ -66,4 +66,13 @@ router.post(
   }
 );
 
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find({}).select(["-password"]);
+    res.json(users);
+  } catch (e) {
+    res.send(400).send("server error");
+  }
+});
+
 module.exports = router;
