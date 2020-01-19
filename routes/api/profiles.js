@@ -105,4 +105,55 @@ router.get("/user/:user_id", (req, res) => {
       res.status(404).json({ profile: "There is no profile for this user" })
     );
 });
+
+router.post(
+  "/experience",
+  [
+    auth,
+    [
+      check("title", "Title is not required")
+        .not()
+        .isEmpty(),
+      check("company", "company is not required")
+        .not()
+        .isEmpty(),
+      check("from", "from is not required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.send(400).json({ err: errors.array() });
+      }
+      const {
+        title,
+        company,
+        from,
+        to,
+        current,
+        description,
+        location
+      } = req.body;
+      const newExp = {
+        title,
+        company,
+        location,
+        from,
+        to,
+        current,
+        description
+      };
+      const profile = await Profile.findOne({ user: req.user.id });
+      profile.experience.unshift(newExp);
+      await profile.save();
+      res.json(profile);
+    } catch (e) {
+      res.status(400).send("server error");
+    }
+  }
+);
+
 module.exports = router;
