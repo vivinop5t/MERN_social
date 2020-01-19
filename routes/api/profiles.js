@@ -156,4 +156,61 @@ router.post(
   }
 );
 
+router.put("/experience/:experience_id", auth, async (req, res) => {
+  const experience_id = req.params.user_id;
+  const errors = {};
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      errors.noprofile = "There is no profile for this user";
+      res.status(404).json(errors);
+    }
+    const experienceIndex = profile.experience.filter(
+      item => item.id === experience_id
+    );
+
+    // Splice out of array
+    profile.experience.splice(experienceIndex, 1);
+    profile.experience = {
+      experience: req.body.experience,
+      from: req.body.from,
+      to: req.body.to,
+      location: req.body.location,
+      title: req.body.title,
+      company: req.body.company
+    };
+    await profile.save();
+
+    res.json(profile);
+  } catch (e) {
+    console.log("e", e);
+    res.status(400).send("server error");
+  }
+});
+
+router.delete("/experience/:experience_id", auth, async (req, res) => {
+  const experience_id = req.params.user_id;
+  const errors = {};
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      errors.noprofile = "There is no profile for this user";
+      res.status(404).json(errors);
+    }
+    const removeIndex = profile.experience
+      .map(item => item.id)
+      .indexOf(experience_id);
+
+    // Splice out of array
+    profile.experience.splice(removeIndex, 1);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (e) {
+    console.log("e", e);
+    res.status(400).send("server error");
+  }
+});
+
 module.exports = router;
